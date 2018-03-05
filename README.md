@@ -1,2 +1,2 @@
-# Material Me! Sample App (Starter Code)
+# Material Me!
 Android Developer Fundamentals Course Practical 5.2
