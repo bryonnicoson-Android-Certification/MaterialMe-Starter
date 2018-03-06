@@ -107,7 +107,7 @@ class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder>  {
             mTitleText = (TextView)itemView.findViewById(R.id.title);
             mInfoText = (TextView)itemView.findViewById(R.id.subTitle);
             mSportsImage = (ImageView)itemView.findViewById(R.id.sportsImage);
-            
+
             itemView.setOnClickListener(this);
         }
 
