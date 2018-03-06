@@ -18,6 +18,7 @@ package com.example.android.materialme;
 
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ArrayList<Sport> mSportsData;
     private SportsAdapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
+
+    //Save instance state
+    public final static String LIST_STATE_KEY = "recycler_list_state";
+    public final static String LIST_DATA_KEY = "sports_data";
+    Parcelable listState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,18 +52,27 @@ public class MainActivity extends AppCompatActivity {
         //Initialize the RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        //Set the Layout Manager
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //Initialize the LayoutManager
+        mLayoutManager = new LinearLayoutManager(this);
 
-        //Initialize the ArrayLIst that will contain the data
-        mSportsData = new ArrayList<>();
+        //Set the Layout Manager to the RecyclerView
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
-        //Initialize the adapter and set it ot the RecyclerView
+        //Restore mSportsData ArrayList state and position or create new
+        if (savedInstanceState != null) {
+            listState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+            mSportsData = savedInstanceState.getParcelableArrayList(LIST_DATA_KEY);
+        } else {
+            mSportsData = new ArrayList<>();
+        }
+
+        //Initialize the Adapter and set to the View
         mAdapter = new SportsAdapter(this, mSportsData);
         mRecyclerView.setAdapter(mAdapter);
 
-        //Get the data
-        initializeData();
+        //if no data from saved state, initialize data
+        if (savedInstanceState == null)
+            initializeData();
 
         //Implement Swipe to Dismiss and Drag & Drop card behavior and attach to RecyclerView
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
@@ -90,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
         String[] sportsInfo = getResources().getStringArray(R.array.sports_info);
         TypedArray sportsImageResources = getResources().obtainTypedArray(R.array.sports_images);
 
-
         //Clear the existing data (to avoid duplication)
         mSportsData.clear();
 
@@ -109,10 +124,23 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Fab onClick method
+     *
      * @param view - fab
      */
-
     public void resetSports(View view) {
         initializeData();
+    }
+
+    /**
+     * methods to save and restore state of recyclerview layout onRestore and onResume
+     *
+     * @param outState - bundle of instance state
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        listState = mLayoutManager.onSaveInstanceState();
+        outState.putParcelableArrayList(LIST_DATA_KEY, mSportsData);
+        outState.putParcelable(LIST_STATE_KEY, listState);
     }
 }
