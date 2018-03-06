@@ -17,6 +17,7 @@
 package com.example.android.materialme;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,7 +89,7 @@ class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder>  {
     /**
      * ViewHolder class that represents each row of data in the RecyclerView
      */
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         //Member Variables for the TextViews
         private TextView mTitleText;
@@ -106,6 +107,8 @@ class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder>  {
             mTitleText = (TextView)itemView.findViewById(R.id.title);
             mInfoText = (TextView)itemView.findViewById(R.id.subTitle);
             mSportsImage = (ImageView)itemView.findViewById(R.id.sportsImage);
+            
+            itemView.setOnClickListener(this);
         }
 
         void bindTo(Sport currentSport){
@@ -113,6 +116,19 @@ class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder>  {
             mTitleText.setText(currentSport.getTitle());
             mInfoText.setText(currentSport.getInfo());
 
+        }
+
+        /**
+         * onClick method connects item to DetailActivity
+         * @param view item
+         */
+        @Override
+        public void onClick(View view) {
+            Sport currentSport = mSportsData.get(getAdapterPosition());
+            Intent detailIntent = new Intent(mContext, DetailActivity.class);
+            detailIntent.putExtra("title", currentSport.getTitle());
+            detailIntent.putExtra("image_resource", currentSport.getImageResource());
+            mContext.startActivity(detailIntent);
         }
     }
 }
