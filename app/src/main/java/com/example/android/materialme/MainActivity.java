@@ -20,6 +20,7 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ArrayList<Sport> mSportsData;
     private SportsAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
+    private GridLayoutManager mLayoutManager;
 
     //Save instance state
     public final static String LIST_STATE_KEY = "recycler_list_state";
@@ -52,8 +53,11 @@ public class MainActivity extends AppCompatActivity {
         //Initialize the RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
+        //get the column count from integers.xml or integers.xml (land)
+        int gridColumnCount = getResources().getInteger(R.integer.grid_column_count);
+
         //Initialize the LayoutManager
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new GridLayoutManager(this, gridColumnCount);
 
         //Set the Layout Manager to the RecyclerView
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -73,6 +77,21 @@ public class MainActivity extends AppCompatActivity {
         //if no data from saved state, initialize data
         if (savedInstanceState == null)
             initializeData();
+
+        /**
+         *  Optional logic to disable Swipe to Dismiss on landscape orientation
+         *
+         *  int swipeDirs;
+         *  if(gridColumnCount > 1){
+         *      swipeDirs = 0;
+         *  } else {
+         *      swipeDirs = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+         *  }
+         *  ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallBack
+         *      (ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN
+         *          | ItemTouchHelper.UP, swipeDirs)
+         *
+         */
 
         //Implement Swipe to Dismiss and Drag & Drop card behavior and attach to RecyclerView
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
