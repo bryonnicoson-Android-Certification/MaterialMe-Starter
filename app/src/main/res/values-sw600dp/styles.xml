@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- MainActivity styles -->
+    <style name="SportsTitle" parent="TextAppearance.AppCompat.Display1">
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+    <style name="SportsDetailText" parent="Base.TextAppearance.AppCompat.Headline">
+    </style>
+
+    <!-- DetailActivity styles -->
+    <style name="SportsDetailTitle" parent="TextAppearance.AppCompat.Display3">
+    </style>
+</resources>

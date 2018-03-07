@@ -23,4 +23,10 @@
         <item name="colorAccent">#FFC400</item>
     </style>
 
+    <!-- MainActivity styles -->
+    <style name="SportsTitle" parent="TextAppearance.AppCompat.Headline"></style>
+    <style name="SportsDetailText" parent="Base.TextAppearance.AppCompat.Subhead"></style>
+
+    <!-- DetailActivity styles -->
+    <style name="SportsDetailTitle" parent="TextAppearance.AppCompat.Headline"></style>
 </resources>
